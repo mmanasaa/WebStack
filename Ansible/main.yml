@@ -1,0 +1,33 @@
+ #!/bin/more
+--- #Use a CloudFormation Template In Ansible
+
+- name: Provision Stack
+  hosts: localhost
+  connection: local
+  remote_user: test
+  become: yes
+  gather_facts: no
+
+  vars_files:
+  - awscreds.yml
+
+  tasks:
+  - name: Run my CloudFormation stack
+    cloudformation:
+      aws_access_key: "{{ aws_id}}"
+      aws_secret_key: "{{ aws_key}}"
+      stack_name: "MyWebStack"
+      region: "us-east-1"
+      state: "present"
+      template: "webstack_template.json"
+      template_parameters:
+        KeyName: "webstack"
+        InstanceType: "t2.micro"
+        OperatorEMail: "muppanenimanasa@outlook.com"
+        AvailabilityZone: "us-east-1a"
+      tags:
+        tool: "ansible"
+        Owner: "Manasa"
+    register: Web_Stack
+  - name: Output of CloudFormation
+    debug: var=Web_Stack.stack_outputs.WebsiteURL
