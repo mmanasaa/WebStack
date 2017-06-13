@@ -30,4 +30,4 @@
         Owner: "Manasa"
     register: Web_Stack
   - name: Output of CloudFormation
-    debug: var=Web_Stack
+    debug: var=Web_Stack.stack_outputs.WebsiteURL
